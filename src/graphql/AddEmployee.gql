@@ -1,0 +1,8 @@
+mutation addEmployee($name: String!, $pin: Int!) {
+  insert_Employee(objects: { name: $name, pin: $pin }) {
+    returning {
+      name
+      pin
+    }
+  }
+}

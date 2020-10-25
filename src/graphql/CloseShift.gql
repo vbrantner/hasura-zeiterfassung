@@ -1,0 +1,5 @@
+mutation CloseShift($shift_id: Int!, $time_out: timestamptz!) {
+  update_Shift_by_pk(pk_columns: {id: $shift_id}, _set: {time_out: $time_out}) {
+    id
+  }
+}

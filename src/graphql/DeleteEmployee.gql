@@ -1,0 +1,5 @@
+mutation deleteEmployee($id: Int!) {
+  delete_Employee_by_pk(id: $id) {
+      id
+  }
+}

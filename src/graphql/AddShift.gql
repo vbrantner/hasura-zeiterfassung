@@ -1,0 +1,17 @@
+mutation AddShift($employee_id: Int!, $time_in: timestamptz!) {
+  insert_Shift(objects: { employee_id_fk: $employee_id, time_in: $time_in }) {
+    returning {
+      Employee {
+        id
+        name
+        pin
+        Shifts(limit: 1, order_by: { created_at: desc }) {
+          id
+          time_in
+          time_out
+        }
+      }
+    }
+    affected_rows
+  }
+}

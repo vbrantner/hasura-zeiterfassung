@@ -1,0 +1,12 @@
+query GetShifts {
+  Shifts: Employee {
+    id
+    name
+    pin
+    Shifts(limit: 1, order_by: { created_at: desc }) {
+      id
+      time_in
+      time_out
+    }
+  }
+}
