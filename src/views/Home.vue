@@ -5,7 +5,6 @@
       <div class="columns">
         <div class="column is-half is-offset-one-quarter">
           Welcome {{ getUser.email }}
-          <v-btn @click="getToken()">GetToken</v-btn>
           <p>{{ Employee }}</p>
         </div>
       </div>
@@ -24,9 +23,6 @@ export default {
   },
   components: {},
   methods: {
-    async getToken() {
-      console.log(await this.getUser["ya"]);
-    },
   },
   apollo: {
     Employee: gql`

@@ -31,11 +31,6 @@ export default {
   },
   methods: {
     ...mapActions(["authAction"]),
-    refreshtoken() {
-      let token = this.getUser;
-      console.log(token)
-      //  localStorage.setItem("apollo-token", user["ya"])
-    },
   },
   computed: {
     ...mapGetters(["getUser", "isUserAuth"]),
