@@ -18,12 +18,29 @@
         <v-btn @click="submit()">Login</v-btn>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <p>firebase auth</p>
+        <section id="firebaseui-auth-container"></section>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+var firebaseui = require('firebaseui');
+import "firebaseui/dist/firebaseui.css";
+import firebase from "firebase";
 export default {
+  mounted() {
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var uiConfig = {
+      signInSuccessUrl: "/profile",
+      signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    };
+    ui.start("#firebaseui-auth-container", uiConfig);
+  },
   methods: {
     ...mapActions(["signInAction"]),
     submit() {

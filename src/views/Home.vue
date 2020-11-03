@@ -1,14 +1,16 @@
 <template>
   <div class="home">
     <h1>Home View</h1>
-    <section v-if="isUserAuth" class="section">
-      <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
-          Welcome {{ getUser.email }}
-          <p>{{ Employee }}</p>
-        </div>
-      </div>
-    </section>
+    <div v-if="isUserAuth">
+      <p>
+        Sie sind angemeldet
+      </p>
+    </div>
+    <div v-else>
+      <p>
+        Bitte anmelden
+      </p>
+    </div>
   </div>
 </template>
 
@@ -22,8 +24,7 @@ export default {
     ...mapGetters(["getUser", "isUserAuth"]),
   },
   components: {},
-  methods: {
-  },
+  methods: {},
   apollo: {
     Employee: gql`
       query {
