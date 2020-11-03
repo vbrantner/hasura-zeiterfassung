@@ -20,8 +20,9 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Zeiterfassung</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn href="/">Home</v-btn>
       <v-btn v-if="isUserAuth" @click="signOut()">Logout</v-btn>
-      <v-btn v-else>Login</v-btn>
+      <v-btn href="/login" v-else>Login</v-btn>
     </v-app-bar>
   </div>
 </template>
@@ -36,18 +37,19 @@ export default {
     ...mapActions(["signOutAction"]),
     signOut() {
       this.signOutAction();
+      this.$router.push("/");
     },
   },
   data: () => ({
     drawer: false,
     item: 0,
     items: [
-      {
-        text: "Mitarbeiterverwaltung",
-        icon: "mdi-account-multiple",
-        route: "mitarbeiterverwaltung",
-      },
-      { text: "Anwesenheit", icon: "mdi-calendar-clock", route: "anwesenheit" },
+      // {
+      //   text: "Mitarbeiterverwaltung",
+      //   icon: "mdi-account-multiple",
+      //   route: "mitarbeiterverwaltung",
+      // },
+      // { text: "Anwesenheit", icon: "mdi-calendar-clock", route: "anwesenheit" },
       { text: "Stempeluhr", icon: "mdi-progress-clock", route: "stempeluhr" },
     ],
   }),
