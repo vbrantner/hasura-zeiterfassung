@@ -27,6 +27,12 @@
                 label="Pin"
                 required
               ></v-text-field>
+              <v-text-field
+                prepend-icon="mdi-sim"
+                v-model="formGSheet"
+                label="GSheets-ID"
+                required
+              ></v-text-field>
             </v-form>
             <v-card-actions>
               <v-btn
@@ -116,6 +122,7 @@ export default {
       const Employee = {
         name: this.formName,
         pin: this.formPin,
+        sheet_id: this.formGSheet
       };
       this.loadingAddEmployee = true;
       this.$apollo
@@ -124,6 +131,7 @@ export default {
           variables: {
             name: Employee.name,
             pin: Employee.pin,
+            sheet_id: this.formGSheet
           },
           // update: (store, { data: { insert_Employee } }) => {
           //   // Read the data from our cache for this query.
@@ -143,6 +151,7 @@ export default {
             this.loadingAddEmployee = false;
             this.formName = "";
             this.formPin = "";
+            this.formGSheet = ""
             this.formNewEmployee = false;
           });
         });
@@ -163,6 +172,7 @@ export default {
     formPin: "",
     Shifts: "",
     loadingAddEmployee: false,
+    formGSheet: "",
   }),
 };
 </script>
