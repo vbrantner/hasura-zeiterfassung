@@ -33,6 +33,9 @@ const routes = [
     path: "/stempeluhr",
     name: "Stempeluhr",
     component: () => import("../views/TimeClock.vue"),
+    meta: {
+      requiresAuth: true,
+    }
   },
   // {
   //   path: "/about",

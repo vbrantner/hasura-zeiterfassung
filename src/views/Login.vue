@@ -1,9 +1,9 @@
 <template>
   <div class="login">
     <h1>
-      Login
+      Google Login
     </h1>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="6"
         ><v-text-field label="E-Mail" v-model="email"></v-text-field
       ></v-col>
@@ -17,10 +17,10 @@
         ></v-text-field>
         <v-btn @click="submit()">Login</v-btn>
       </v-col>
-    </v-row>
+    </v-row> -->
     <v-row>
       <v-col>
-        <p>firebase auth</p>
+        <h3 class='text-center'>Bitte loggen Sie sich ein</h3>
         <section id="firebaseui-auth-container"></section>
       </v-col>
     </v-row>
