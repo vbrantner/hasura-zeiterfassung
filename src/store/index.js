@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import firebase from "firebase";
+import onLogin from "../vue-apollo"
+import onLogout from "../vue-apollo"
 
 const initialState = () => {
   return { user: null, error: null };
@@ -36,7 +38,7 @@ export default new Vuex.Store({
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then((response) => {
           commit("setUser", response.user);
-          localStorage.setItem("apollo-token", response.user["ya"]);
+          onLogin(Vue.$apollo.provider.defaultClient, response.user["ya"])
         })
         .catch((error) => {
           commit("setError", error.message);
@@ -51,8 +53,7 @@ export default new Vuex.Store({
           localStorage.setItem("apollo-token", response.user["ya"]);
           firebase.firestore.collection("userCollection").add({
             uid: response.uid,
-            
-          })
+          });
         })
         .catch((error) => {
           commit("setError", error.message);
@@ -64,21 +65,28 @@ export default new Vuex.Store({
         .signOut()
         .then(() => {
           commit("setUser", null);
+          onLogout(Vue.$apollo.provider.defaultClient)
         })
         .catch((error) => {
           commit("setError", error.message);
         });
     },
     authAction({ commit }) {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          commit("setUser", user);
-          localStorage.setItem("apollo-token", user["ya"]);
-        } else {
-          commit("setUser", null);
-        }
+      return new Promise(function(resolve, reject) {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            commit("setUser", user);
+            localStorage.setItem("apollo-token", user["ya"]);
+            console.log(user["ya"]);
+            resolve(user);
+          } else {
+            commit("setUser", null);
+            console.log("no logg");
+            reject(null);
+          }
+        });
       });
-    },
+    }
   },
   modules: {},
 });
