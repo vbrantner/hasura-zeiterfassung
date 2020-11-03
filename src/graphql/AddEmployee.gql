@@ -1,8 +1,9 @@
-mutation addEmployee($name: String!, $pin: Int!) {
-  insert_Employee(objects: { name: $name, pin: $pin }) {
+mutation addEmployee($name: String!, $pin: Int!, $sheet_id: String!) {
+  insert_Employee(objects: { name: $name, pin: $pin, sheet_id: $sheet_id}) {
     returning {
       name
       pin
+      sheet_id
     }
   }
 }
