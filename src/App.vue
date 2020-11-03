@@ -27,7 +27,6 @@ export default {
   },
   mounted() {
     this.authAction();
-    this.refreshtoken();
   },
   methods: {
     ...mapActions(["authAction"]),

@@ -1,10 +1,13 @@
 import Vue from "vue";
 import VueApollo from "vue-apollo";
+// import store from './store/index'
 import {
   createApolloClient,
   restartWebsockets,
 } from "vue-cli-plugin-apollo/graphql-client";
-import { setContext } from "apollo-link-context";
+import { onError } from "apollo-link-error";
+import { Observable } from "apollo-link"
+// import { setContext } from "apollo-link-context"
 
 // Install the vue plugin
 Vue.use(VueApollo);
@@ -12,23 +15,61 @@ Vue.use(VueApollo);
 // Name of the localStorage item
 const AUTH_TOKEN = "apollo-token";
 
-const authLink = setContext(async (_, { headers }) => {
-  // Use your async token function here:
-  const token = await localStorage.getItem('apollo-token')
-  // Return the headers to the context so httpLink can read them
-  console.log(`Bearer ${token}`)
-  return {
-    headers: {
-      ...headers,
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
+const getToken = new Promise(function(resolve, reject) {
+  const token = localStorage.getItem("apollo-token");
+  if (token) {
+    resolve(token);
+  } else {
+    reject("no token");
+  }
+});
+
+const errorHandler = onError(({ graphQLErrors, operation, forward }) => {
+  if (graphQLErrors[0].extensions.code == "invalid-jwt") {
+    // Let's refresh token through async request
+    return new Observable((observer) => {
+      getToken
+        .then((token) => {
+          operation.setContext(({ headers = {} }) => ({
+            headers: {
+              // Re-add old headers
+              ...headers,
+              // Switch out old access token for new one
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }));
+        })
+        .then(() => {
+          const subscriber = {
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer),
+          };
+
+          // Retry last failed request
+          forward(operation).subscribe(subscriber);
+        })
+        .catch((error) => {
+          // No refresh or client token available, we force user to login
+          observer.error(error);
+        });
+    });
+  }
 });
 
 // Http endpoint
 const httpEndpoint =
   process.env.VUE_APP_GRAPHQL_HTTP ||
   "https://true-gannet-28.hasura.app/v1/graphql";
+
+// const link = new TokenRefreshLink({
+//   accessTokenField: 'apollo-token',
+//   isTokenValidOrUndefined: () => boolean,
+//   fetchAccessToken: () => $vue,
+//   handleFetch: (accessToken: string) => void,
+//   handleResponse?: (operation, accessTokenField) => response => any,
+//   handleError?: (err: Error) => void,
+// });
 
 // Config
 const defaultOptions = {
@@ -52,8 +93,7 @@ const defaultOptions = {
   // Override default apollo link
   // note: don't override httpLink here, specify httpLink options in the
   // httpLinkOptions property of defaultOptions.
-  // link: myLink
-  link: authLink,
+  link: errorHandler
 
   // Override default cache
   // cache: myCache
@@ -68,7 +108,7 @@ const defaultOptions = {
   // clientState: { resolvers: { ... }, defaults: { ... } }
 };
 
-// Call this in the Vue app file
+// Call this in the Vue app fill
 export function createProvider(options = {}) {
   // Create apollo client
   const { apolloClient, wsClient } = createApolloClient({
