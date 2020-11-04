@@ -6,6 +6,26 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <div class="pb-3">
+          <v-card>
+            <v-card-text>
+              <div class="pa-1">
+                <v-btn color="light-green lighten-1">
+                  Grün hintelegt, bedeutet Nutzer ist angemeldet.
+                </v-btn>
+              </div>
+              <div class="pa-1">
+                <v-btn>
+                  Keine Farbe, bedeutet Nutzer ist abgemeldet.
+                </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col v-if="selectedEmployee" cols="4">
         <v-card>
           <v-card-title>Mitarbeiter</v-card-title>
@@ -26,22 +46,6 @@
         </v-card>
       </v-col>
       <v-col v-else cols="6">
-        <div class="pb-3">
-          <v-card>
-            <v-card-text>
-              <div class="pa-1">
-                <v-btn color="light-green lighten-1">
-                  Grün hintelegt, bedeutet Nutzer ist angemeldet.
-                </v-btn>
-              </div>
-              <div class="pa-1">
-                <v-btn>
-                  Keine Farbe, bedeutet Nutzer ist abgemeldet.
-                </v-btn>
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
         <v-card>
           <v-card-title>Mitarbeiter</v-card-title>
           <v-card-text>
