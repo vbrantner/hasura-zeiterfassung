@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import store from "../store";
+// import store from "../store";
+import firebase from "firebase";
 
 Vue.use(VueRouter);
 
@@ -10,11 +11,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
   },
   // {
   //   path: "/signup",
@@ -27,7 +23,7 @@ const routes = [
     component: () => import("../views/EmployeeManagement.vue"),
     meta: {
       requiresAuth: true,
-    }
+    },
   },
   {
     path: "/stempeluhr",
@@ -35,7 +31,12 @@ const routes = [
     component: () => import("../views/TimeClock.vue"),
     meta: {
       requiresAuth: true,
-    }
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
   },
   // {
   //   path: "/about",
@@ -56,11 +57,13 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  if (requiresAuth && !store.getters.isUserAuth) {
-    next("login");
-  } else {
-    next();
-  }
+  firebase.auth().onAuthStateChanged((user) => {
+    if (requiresAuth && !user) {
+      next("login");
+    } else {
+      next();
+    }
+  });
 });
 
 export default router;
