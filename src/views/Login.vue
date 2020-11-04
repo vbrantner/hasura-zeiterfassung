@@ -36,7 +36,7 @@ export default {
   mounted() {
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
     var uiConfig = {
-      signInSuccessUrl: "/profile",
+      signInSuccessUrl: "/stempeluhr",
       signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     };
     ui.start("#firebaseui-auth-container", uiConfig);
